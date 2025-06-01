@@ -1,6 +1,6 @@
+
 import React, { createContext, useContext, useState, useEffect } from 'react';
 import { Property } from '@/data/properties';
-import { propertiesApi } from "@/lib/api";
 
 interface PropertiesContextType {
   properties: Property[];
@@ -28,46 +28,65 @@ export const useProperties = () => {
 };
 
 export const PropertiesProvider: React.FC<{ children: React.ReactNode }> = ({ children }) => {
-  const [propertiesList, setPropertiesList] = useState<any[]>([]);
+  const [propertiesList, setPropertiesList] = useState<Property[]>([]);
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    const fetchProperties = async () => {
+    const initializeProperties = async () => {
       try {
-        const data = await propertiesApi.getAll();
-        setPropertiesList(data);
+        // Try to get properties from localStorage first
+        const storedProperties = localStorage.getItem('martilhaven_properties');
+        if (storedProperties) {
+          const parsedProperties = JSON.parse(storedProperties);
+          setPropertiesList(parsedProperties);
+        } else {
+          // Initialize with empty array if no stored properties
+          setPropertiesList([]);
+        }
       } catch (error) {
-        console.error('Error fetching properties:', error);
+        console.error('Error loading properties:', error);
+        setPropertiesList([]);
       } finally {
         setLoading(false);
       }
     };
 
-    fetchProperties();
+    initializeProperties();
   }, []);
 
   const addProperty = (newProperty: Omit<Property, 'id'>) => {
     const property: Property = {
       ...newProperty,
       id: `PROP${Math.floor(Math.random() * 10000).toString().padStart(4, '0')}`,
-      status: newProperty.status || 'pending' as 'pending', // Default status for new properties
+      status: newProperty.status || 'pending' as 'pending',
     };
 
-    setPropertiesList(prevProperties => [...prevProperties, property]);
+    setPropertiesList(prevProperties => {
+      const updatedProperties = [...prevProperties, property];
+      // Save to localStorage
+      localStorage.setItem('martilhaven_properties', JSON.stringify(updatedProperties));
+      return updatedProperties;
+    });
   };
 
   const updateProperty = (id: string, updatedFields: Partial<Property>) => {
-    setPropertiesList(prevProperties => 
-      prevProperties.map(property => 
+    setPropertiesList(prevProperties => {
+      const updatedProperties = prevProperties.map(property => 
         property.id === id ? { ...property, ...updatedFields } : property
-      )
-    );
+      );
+      // Save to localStorage
+      localStorage.setItem('martilhaven_properties', JSON.stringify(updatedProperties));
+      return updatedProperties;
+    });
   };
 
   const deleteProperty = (id: string) => {
-    setPropertiesList(prevProperties => 
-      prevProperties.filter(property => property.id !== id)
-    );
+    setPropertiesList(prevProperties => {
+      const updatedProperties = prevProperties.filter(property => property.id !== id);
+      // Save to localStorage
+      localStorage.setItem('martilhaven_properties', JSON.stringify(updatedProperties));
+      return updatedProperties;
+    });
   };
 
   const value = {
