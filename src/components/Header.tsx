@@ -1,4 +1,3 @@
-
 import React, { useState, useEffect } from "react";
 import { NavLink, Link, useNavigate } from "react-router-dom";
 import { List, X, User, Mail, Lock, ChevronDown, LogOut } from "lucide-react";
@@ -137,29 +136,29 @@ const Header = () => {
   return (
     <>
       <header className={`${isScrolled ? "bg-white shadow-sm" : "bg-transparent"} sticky top-0 z-50 transition-all duration-300`}>
-        <div className="container-custom mx-auto px-4 bg-slate-200">
-          <div className="flex items-center justify-between h-20">
-            {/* Logo */}
-            <Link to="/" className="flex items-center space-x-2">
+        <div className="w-full px-3 sm:px-4 lg:px-6 xl:px-8 mx-auto max-w-7xl bg-slate-200">
+          <div className="flex items-center justify-between h-16 sm:h-18 lg:h-20">
+            {/* Logo - Responsive scaling */}
+            <Link to="/" className="flex items-center space-x-1 sm:space-x-2 min-w-0 flex-shrink-0">
               <div className="flex items-center">
-                <div className="w-10 h-10 bg-moroccan-blue flex items-center justify-center rounded-md shadow-md">
-                  <span className="text-white font-serif text-xl font-bold">M</span>
+                <div className="w-8 h-8 sm:w-9 sm:h-9 lg:w-10 lg:h-10 bg-moroccan-blue flex items-center justify-center rounded-md shadow-md">
+                  <span className="text-white font-serif text-lg sm:text-xl font-bold">M</span>
                 </div>
-                <div className="ml-2 font-serif flex items-center">
-                  <span className="text-moroccan-blue text-xl font-medium">Martil</span>
-                  <span className="text-moroccan-gold text-xl font-medium">Haven</span>
+                <div className="ml-1 sm:ml-2 font-serif flex items-center">
+                  <span className="text-moroccan-blue text-lg sm:text-xl font-medium">Martil</span>
+                  <span className="text-moroccan-gold text-lg sm:text-xl font-medium">Haven</span>
                 </div>
               </div>
             </Link>
 
-            {/* Desktop Navigation */}
-            <nav className="hidden lg:flex items-center space-x-8">
+            {/* Desktop Navigation - Hidden on small screens, adaptive spacing */}
+            <nav className="hidden lg:flex items-center space-x-4 xl:space-x-8 flex-1 justify-center">
               {navigationLinks.map(link => (
                 <NavLink 
                   key={link.path} 
                   to={link.path} 
                   className={({ isActive }) => 
-                    `text-sm font-medium transition-colors hover:text-moroccan-blue ${
+                    `text-sm font-medium transition-colors hover:text-moroccan-blue whitespace-nowrap ${
                       isActive ? "text-moroccan-blue" : "text-gray-700"
                     }`
                   }
@@ -167,16 +166,19 @@ const Header = () => {
                   {link.name}
                 </NavLink>
               ))}
+            </nav>
 
+            {/* Desktop Auth Section - Responsive sizing */}
+            <div className="hidden lg:flex items-center space-x-2 xl:space-x-3 flex-shrink-0">
               {isLoggedIn ? (
-                <div className="flex items-center space-x-3">
+                <div className="flex items-center space-x-2 xl:space-x-3">
                   <Button 
                     onClick={handleListPropertyClick} 
-                    className="bg-moroccan-gold hover:bg-moroccan-gold/90 text-white px-4 py-2 rounded-lg text-sm font-medium shadow-sm transition-colors"
+                    className="bg-moroccan-gold hover:bg-moroccan-gold/90 text-white px-3 xl:px-4 py-2 rounded-lg text-sm font-medium shadow-sm transition-colors"
                   >
                     Dashboard
                   </Button>
-                  <div className="flex items-center space-x-2">
+                  <div className="flex items-center space-x-1 xl:space-x-2">
                     <div className="flex items-center space-x-1">
                       {getLoginMethodIcon()}
                     </div>
@@ -185,9 +187,9 @@ const Header = () => {
                       <DropdownMenuTrigger asChild>
                         <Button 
                           variant="ghost" 
-                          className="flex items-center space-x-1 p-2 hover:bg-gray-100 rounded-lg"
+                          className="flex items-center space-x-1 p-1 xl:p-2 hover:bg-gray-100 rounded-lg"
                         >
-                          <Avatar className="h-8 w-8">
+                          <Avatar className="h-7 w-7 xl:h-8 xl:w-8">
                             <AvatarFallback className="bg-moroccan-blue text-white text-sm">
                               {userName.charAt(0).toUpperCase()}
                             </AvatarFallback>
@@ -195,7 +197,7 @@ const Header = () => {
                           <ChevronDown className="h-3 w-3 text-gray-600" />
                         </Button>
                       </DropdownMenuTrigger>
-                      <DropdownMenuContent align="end" className="w-48 bg-white border shadow-lg">
+                      <DropdownMenuContent align="end" className="w-48 bg-white border shadow-lg z-50">
                         <DropdownMenuItem className="flex items-center space-x-2 cursor-pointer">
                           <User className="h-4 w-4" />
                           <div>
@@ -225,23 +227,23 @@ const Header = () => {
               ) : (
                 <Button 
                   onClick={handleListPropertyClick} 
-                  className="bg-moroccan-gold hover:bg-moroccan-gold/90 text-white px-4 py-2 rounded-lg text-sm font-medium shadow-sm transition-colors"
+                  className="bg-moroccan-gold hover:bg-moroccan-gold/90 text-white px-3 xl:px-4 py-2 rounded-lg text-sm font-medium shadow-sm transition-colors whitespace-nowrap"
                 >
                   Become a host
                 </Button>
               )}
-            </nav>
+            </div>
 
-            {/* Mobile menu button */}
+            {/* Mobile menu button - Responsive sizing */}
             <button 
               onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)} 
-              className="lg:hidden flex items-center p-2" 
+              className="lg:hidden flex items-center p-1 sm:p-2 flex-shrink-0" 
               aria-expanded={isMobileMenuOpen}
             >
               {isMobileMenuOpen ? (
-                <X className="h-6 w-6 text-gray-700" />
+                <X className="h-5 w-5 sm:h-6 sm:w-6 text-gray-700" />
               ) : (
-                <List className="h-6 w-6 text-gray-700" />
+                <List className="h-5 w-5 sm:h-6 sm:w-6 text-gray-700" />
               )}
               <span className="sr-only">
                 {isMobileMenuOpen ? "Close menu" : "Open menu"}
@@ -249,10 +251,10 @@ const Header = () => {
             </button>
           </div>
 
-          {/* Mobile Navigation */}
+          {/* Mobile Navigation - Improved responsive design */}
           {isMobileMenuOpen && (
-            <nav className="lg:hidden py-4 border-t">
-              <ul className="flex flex-col space-y-4">
+            <nav className="lg:hidden py-4 border-t animate-fade-in">
+              <ul className="flex flex-col space-y-3 sm:space-y-4">
                 {navigationLinks.map(link => (
                   <li key={link.path}>
                     <NavLink 
@@ -268,16 +270,16 @@ const Header = () => {
                     </NavLink>
                   </li>
                 ))}
-                <li>
+                <li className="pt-2">
                   {isLoggedIn ? (
-                    <div className="space-y-2">
+                    <div className="space-y-3">
                       <Button 
                         onClick={handleListPropertyClick} 
                         className="w-full bg-moroccan-gold hover:bg-moroccan-gold/90 text-white"
                       >
                         Dashboard
                       </Button>
-                      <div className="flex items-center justify-between">
+                      <div className="flex items-center justify-between bg-gray-50 p-3 rounded-lg">
                         <div className="flex items-center space-x-2">
                           <Avatar className="h-8 w-8">
                             <AvatarFallback className="bg-moroccan-blue text-white text-sm">
@@ -296,10 +298,10 @@ const Header = () => {
                           onClick={handleLogout}
                           variant="outline" 
                           size="sm" 
-                          className="flex items-center space-x-1 lg:space-x-2 text-red-600 hover:text-red-700 hover:bg-red-50 px-2 lg:px-3"
+                          className="flex items-center space-x-1 text-red-600 hover:text-red-700 hover:bg-red-50 px-2 sm:px-3"
                         >
-                          <LogOut className="h-3 w-3 lg:h-4 lg:w-4" />
-                          <span className="hidden sm:inline text-xs lg:text-sm">Logout</span>
+                          <LogOut className="h-3 w-3 sm:h-4 sm:w-4" />
+                          <span className="text-xs sm:text-sm">Logout</span>
                         </Button>
                       </div>
                     </div>
