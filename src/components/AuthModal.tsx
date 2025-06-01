@@ -1,4 +1,3 @@
-
 import React, { useState } from 'react';
 import { Dialog, DialogContent, DialogHeader, DialogTitle } from "@/components/ui/dialog";
 import { Button } from "@/components/ui/button";
@@ -133,6 +132,25 @@ const AuthModal: React.FC<AuthModalProps> = ({ isOpen, onClose, onSuccess }) => 
         localStorage.setItem('userName', googleUserData.name);
         localStorage.setItem('userEmail', googleUserData.email);
         localStorage.setItem('loginMethod', 'google');
+        
+        // Save Google user data to localStorage
+        const savedUsers = localStorage.getItem('martilhaven_users');
+        const adminCreatedUsers = savedUsers ? JSON.parse(savedUsers) : [];
+        
+        // Check if user already exists
+        const userExists = adminCreatedUsers.some(user => user.email === googleUserData.email);
+        
+        if (!userExists) {
+          adminCreatedUsers.push({
+            name: googleUserData.name,
+            email: googleUserData.email,
+            username: googleUserData.username,
+            password: null, // No password for Google sign-up
+            role: 'user',
+          });
+          localStorage.setItem('martilhaven_users', JSON.stringify(adminCreatedUsers));
+        }
+        
         onSuccess();
       } else {
         const errorData = await createResponse.json();

@@ -1,4 +1,3 @@
-
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { Button } from "@/components/ui/button";
@@ -156,6 +155,18 @@ const LoginPage = () => {
               navigate("/");
           }
         } else {
+          // Check if user signed up with Google
+          const userByGoogleEmail = adminCreatedUsers.find(u => u.email === data.username && u.password === null);
+          
+          if (userByGoogleEmail) {
+            toast({
+              title: "Google sign-up detected",
+              description: `Welcome back, ${userByGoogleEmail.name}! Please use Google login.`,
+            });
+            setIsLoading(false);
+            return;
+          }
+          
           // Invalid credentials
           toast({
             title: "Login failed",
