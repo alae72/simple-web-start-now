@@ -158,6 +158,29 @@ const fallbackUsers = [
 
 // API Routes
 
+// Check if user exists by email (for Google login)
+app.get('/api/auth/check-email/:email', async (req, res) => {
+  try {
+    const { email } = req.params;
+    
+    if (!isDatabaseConnected) {
+      const user = fallbackUsers.find(u => u.email === email);
+      return res.json({ exists: !!user, user: user ? { id: user.id, username: user.username, email: user.email, name: user.name, role: user.role } : null });
+    }
+    
+    const result = await pool.query('SELECT id, username, email, name, role FROM users WHERE email = $1', [email]);
+    const exists = result.rows.length > 0;
+    
+    res.json({ 
+      exists, 
+      user: exists ? result.rows[0] : null 
+    });
+  } catch (error) {
+    console.error('Error checking email:', error);
+    res.status(500).json({ error: 'Server error' });
+  }
+});
+
 // Authentication routes
 app.post('/api/auth/login', async (req, res) => {
   try {
@@ -377,6 +400,12 @@ app.post('/api/users', async (req, res) => {
     const { username, email, password, name, phone, role, status } = req.body;
     
     if (!isDatabaseConnected) {
+      // Check if user already exists by email (for Google users)
+      const existingUser = fallbackUsers.find(u => u.email === email);
+      if (existingUser) {
+        return res.status(400).json({ error: 'User with this email already exists' });
+      }
+      
       const newUser = {
         id: fallbackUsers.length + 1,
         username,
@@ -401,6 +430,12 @@ app.post('/api/users', async (req, res) => {
         registeredDate: newUser.created_at.split('T')[0],
         lastLogin: '-'
       });
+    }
+    
+    // Check if user already exists by email
+    const existingUser = await pool.query('SELECT * FROM users WHERE email = $1', [email]);
+    if (existingUser.rows.length > 0) {
+      return res.status(400).json({ error: 'User with this email already exists' });
     }
     
     const result = await pool.query(

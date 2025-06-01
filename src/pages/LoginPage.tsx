@@ -44,48 +44,45 @@ const LoginPage = () => {
     },
   });
 
-  const onSubmit = (data: LoginFormValues) => {
+  const onSubmit = async (data: LoginFormValues) => {
     setIsLoading(true);
     
-    // Mock authentication - Find user in both default users and admin-created users
-    setTimeout(() => {
-      setIsLoading(false);
-      
-      // Get users created through admin panel
-      const savedUsers = localStorage.getItem('martilhaven_users');
-      const adminCreatedUsers = savedUsers ? JSON.parse(savedUsers) : [];
-      
-      // Combine default users with admin-created users
-      const allUsers = [...defaultUsers, ...adminCreatedUsers];
-      
-      // Find user by username first
-      const userByUsername = allUsers.find(u => u.username === data.username);
-      
-      // If no username match, try email for admin-created users
-      const userByEmail = adminCreatedUsers.find(u => u.email === data.username);
-      
-      const user = userByUsername || userByEmail;
-      
-      if (user && user.password === data.password) {
+    try {
+      // Try server authentication first
+      const response = await fetch('/api/auth/login', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          username: data.username,
+          password: data.password,
+        }),
+      });
+
+      if (response.ok) {
+        const userData = await response.json();
+        
         // Store user authentication data
-        localStorage.setItem("userRole", user.role);
+        localStorage.setItem("userRole", userData.user.role);
         localStorage.setItem("isLoggedIn", "true");
-        localStorage.setItem("userName", user.name);
+        localStorage.setItem("userName", userData.user.name);
+        localStorage.setItem("userEmail", userData.user.email);
         localStorage.setItem("loginMethod", "credentials");
         
         // Role-based navigation
-        switch (user.role) {
+        switch (userData.user.role) {
           case "admin":
             toast({
               title: "Admin login successful",
-              description: `Welcome back, ${user.name}!`,
+              description: `Welcome back, ${userData.user.name}!`,
             });
             navigate("/admin");
             break;
           case "staff":
             toast({
               title: "Staff login successful",
-              description: `Welcome back, ${user.name}!`,
+              description: `Welcome back, ${userData.user.name}!`,
             });
             navigate("/staff");
             break;
@@ -93,26 +90,90 @@ const LoginPage = () => {
           case "user":
             toast({
               title: "Login successful",
-              description: `Welcome back, ${user.name}!`,
+              description: `Welcome back, ${userData.user.name}!`,
             });
             navigate("/");
             break;
           default:
             toast({
               title: "Login successful",
-              description: `Welcome back, ${user.name}!`,
+              description: `Welcome back, ${userData.user.name}!`,
             });
             navigate("/");
         }
       } else {
-        // Invalid credentials
-        toast({
-          title: "Login failed",
-          description: "Invalid username or password. Please try again.",
-          variant: "destructive",
-        });
+        // If server auth fails, try fallback local authentication
+        const savedUsers = localStorage.getItem('martilhaven_users');
+        const adminCreatedUsers = savedUsers ? JSON.parse(savedUsers) : [];
+        
+        // Combine default users with admin-created users
+        const allUsers = [...defaultUsers, ...adminCreatedUsers];
+        
+        // Find user by username first
+        const userByUsername = allUsers.find(u => u.username === data.username);
+        
+        // If no username match, try email for admin-created users
+        const userByEmail = adminCreatedUsers.find(u => u.email === data.username);
+        
+        const user = userByUsername || userByEmail;
+        
+        if (user && user.password === data.password) {
+          // Store user authentication data
+          localStorage.setItem("userRole", user.role);
+          localStorage.setItem("isLoggedIn", "true");
+          localStorage.setItem("userName", user.name);
+          localStorage.setItem("loginMethod", "credentials");
+          
+          // Role-based navigation
+          switch (user.role) {
+            case "admin":
+              toast({
+                title: "Admin login successful",
+                description: `Welcome back, ${user.name}!`,
+              });
+              navigate("/admin");
+              break;
+            case "staff":
+              toast({
+                title: "Staff login successful",
+                description: `Welcome back, ${user.name}!`,
+              });
+              navigate("/staff");
+              break;
+            case "customer":
+            case "user":
+              toast({
+                title: "Login successful",
+                description: `Welcome back, ${user.name}!`,
+              });
+              navigate("/");
+              break;
+            default:
+              toast({
+                title: "Login successful",
+                description: `Welcome back, ${user.name}!`,
+              });
+              navigate("/");
+          }
+        } else {
+          // Invalid credentials
+          toast({
+            title: "Login failed",
+            description: "Invalid username or password. Please try again.",
+            variant: "destructive",
+          });
+        }
       }
-    }, 1000);
+    } catch (error) {
+      console.error('Login error:', error);
+      toast({
+        title: "Login failed",
+        description: "Network error. Please try again.",
+        variant: "destructive",
+      });
+    } finally {
+      setIsLoading(false);
+    }
   };
 
   return (

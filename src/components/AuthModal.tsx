@@ -80,14 +80,70 @@ const AuthModal: React.FC<AuthModalProps> = ({ isOpen, onClose, onSuccess }) => 
     }
   };
 
-  const handleGoogleLogin = () => {
-    // Mock Google login
-    localStorage.setItem('isLoggedIn', 'true');
-    localStorage.setItem('userRole', 'customer');
-    localStorage.setItem('userName', 'Google User');
-    localStorage.setItem('userEmail', 'user@gmail.com');
-    localStorage.setItem('loginMethod', 'google');
-    onSuccess();
+  const handleGoogleLogin = async () => {
+    try {
+      setLoading(true);
+      
+      // Mock Google user data (in real implementation, this would come from Google OAuth)
+      const googleUserData = {
+        name: 'Google User',
+        email: 'googleuser@gmail.com',
+        username: 'googleuser' + Date.now(), // Generate unique username
+        password: 'google_auth_password', // Consistent password for Google users
+        role: 'customer'
+      };
+
+      // Check if user already exists by email
+      const checkResponse = await fetch(`/api/auth/check-email/${encodeURIComponent(googleUserData.email)}`);
+      
+      if (checkResponse.ok) {
+        const checkData = await checkResponse.json();
+        
+        if (checkData.exists) {
+          // User exists, log them in
+          localStorage.setItem('isLoggedIn', 'true');
+          localStorage.setItem('userRole', checkData.user.role);
+          localStorage.setItem('userName', checkData.user.name);
+          localStorage.setItem('userEmail', checkData.user.email);
+          localStorage.setItem('loginMethod', 'google');
+          onSuccess();
+          return;
+        }
+      }
+
+      // User doesn't exist, create new user in database
+      const createResponse = await fetch('/api/users', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          username: googleUserData.username,
+          email: googleUserData.email,
+          name: googleUserData.name,
+          password: googleUserData.password,
+          role: googleUserData.role,
+          status: 'active'
+        }),
+      });
+
+      if (createResponse.ok) {
+        localStorage.setItem('isLoggedIn', 'true');
+        localStorage.setItem('userRole', googleUserData.role);
+        localStorage.setItem('userName', googleUserData.name);
+        localStorage.setItem('userEmail', googleUserData.email);
+        localStorage.setItem('loginMethod', 'google');
+        onSuccess();
+      } else {
+        const errorData = await createResponse.json();
+        setError(errorData.error || 'Failed to create Google account. Please try again.');
+      }
+    } catch (error) {
+      console.error('Google login error:', error);
+      setError('Google login failed. Please try again.');
+    } finally {
+      setLoading(false);
+    }
   };
 
   const resetForm = () => {
