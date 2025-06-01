@@ -1,267 +1,163 @@
 
-import { useState } from "react";
-import { Menu, X, ArrowRight, Mail, Phone, MapPin } from "lucide-react";
-import { Button } from "@/components/ui/button";
-import { Card, CardContent } from "@/components/ui/card";
+import React from 'react';
+import { Link } from 'react-router-dom';
+import Header from '@/components/Header';
+import Footer from '@/components/Footer';
+import Hero from '@/components/Hero';
+import FeaturedProperties from '@/components/FeaturedProperties';
 
 const Index = () => {
-  const [isMenuOpen, setIsMenuOpen] = useState(false);
-
-  const scrollToSection = (sectionId: string) => {
-    const element = document.getElementById(sectionId);
-    element?.scrollIntoView({ behavior: "smooth" });
-    setIsMenuOpen(false);
-  };
-
   return (
-    <div className="min-h-screen bg-gradient-to-br from-slate-900 via-blue-900 to-indigo-900 text-white">
-      {/* Navigation */}
-      <nav className="fixed top-0 w-full bg-white/10 backdrop-blur-md border-b border-white/20 z-50">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="flex justify-between items-center py-4">
-            <div className="text-2xl font-bold bg-gradient-to-r from-blue-400 to-purple-400 bg-clip-text text-transparent">
-              WebCraft
+    <div className="min-h-screen flex flex-col">
+      <Header />
+      
+      <main className="flex-grow">
+        <Hero />
+        
+        {/* Featured Properties Section */}
+        <FeaturedProperties />
+        
+        {/* About Martil Section */}
+        <section className="py-16 bg-white">
+          <div className="container-custom">
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-12 items-center">
+              <div>
+                <img 
+                  src="https://images.unsplash.com/photo-1469041797191-50ace28483c3?ixlib=rb-1.2.1&auto=format&fit=crop&w=1350&q=80" 
+                  alt="Martil Beach" 
+                  className="rounded-lg shadow-lg"
+                />
+              </div>
+              <div>
+                <h2 className="section-title">Experience the Beauty of Martil</h2>
+                <p className="text-gray-700 mb-4">
+                  Nestled on Morocco's stunning Mediterranean coast, Martil is a charming seaside town known for its beautiful beaches, vibrant culture, and relaxed atmosphere.
+                </p>
+                <p className="text-gray-700 mb-4">
+                  Just a short drive from Tetouan, Martil offers visitors a perfect blend of authentic Moroccan traditions and modern coastal living. The town comes alive during summer when visitors from across Morocco and abroad flock to enjoy its pristine beaches and warm hospitality.
+                </p>
+                <p className="text-gray-700 mb-6">
+                  Whether you're looking for a luxurious beachfront villa, a traditional Moroccan riad, or a modern apartment, Martil Haven offers a curated selection of the finest accommodations in this Mediterranean paradise.
+                </p>
+                <button className="btn-outline">
+                  Learn More About Martil
+                </button>
+              </div>
             </div>
+          </div>
+        </section>
+        
+        {/* Testimonials Section */}
+        <section className="py-16 bg-moroccan-white">
+          <div className="container-custom">
+            <h2 className="section-title text-center mx-auto">What Our Guests Say</h2>
+            <p className="text-center text-gray-600 max-w-2xl mx-auto mb-12">
+              Read about the experiences of guests who have stayed in our properties and discovered the magic of Martil.
+            </p>
             
-            {/* Desktop Menu */}
-            <div className="hidden md:flex space-x-8">
-              <button 
-                onClick={() => scrollToSection('home')}
-                className="hover:text-blue-300 transition-colors"
-              >
-                Home
-              </button>
-              <button 
-                onClick={() => scrollToSection('about')}
-                className="hover:text-blue-300 transition-colors"
-              >
-                About
-              </button>
-              <button 
-                onClick={() => scrollToSection('services')}
-                className="hover:text-blue-300 transition-colors"
-              >
-                Services
-              </button>
-              <button 
-                onClick={() => scrollToSection('contact')}
-                className="hover:text-blue-300 transition-colors"
-              >
-                Contact
-              </button>
-            </div>
-
-            {/* Mobile Menu Button */}
-            <button 
-              className="md:hidden"
-              onClick={() => setIsMenuOpen(!isMenuOpen)}
-            >
-              {isMenuOpen ? <X size={24} /> : <Menu size={24} />}
-            </button>
-          </div>
-
-          {/* Mobile Menu */}
-          {isMenuOpen && (
-            <div className="md:hidden py-4 space-y-4">
-              <button 
-                onClick={() => scrollToSection('home')}
-                className="block hover:text-blue-300 transition-colors"
-              >
-                Home
-              </button>
-              <button 
-                onClick={() => scrollToSection('about')}
-                className="block hover:text-blue-300 transition-colors"
-              >
-                About
-              </button>
-              <button 
-                onClick={() => scrollToSection('services')}
-                className="block hover:text-blue-300 transition-colors"
-              >
-                Services
-              </button>
-              <button 
-                onClick={() => scrollToSection('contact')}
-                className="block hover:text-blue-300 transition-colors"
-              >
-                Contact
-              </button>
-            </div>
-          )}
-        </div>
-      </nav>
-
-      {/* Hero Section */}
-      <section id="home" className="pt-20 min-h-screen flex items-center justify-center">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
-          <div className="animate-fade-in">
-            <h1 className="text-5xl md:text-7xl font-bold mb-6 bg-gradient-to-r from-blue-400 via-purple-400 to-pink-400 bg-clip-text text-transparent">
-              Welcome to the Future
-            </h1>
-            <p className="text-xl md:text-2xl mb-8 text-gray-300 max-w-3xl mx-auto">
-              We create stunning digital experiences that captivate your audience and drive results. 
-              Let's build something amazing together.
-            </p>
-            <div className="flex flex-col sm:flex-row gap-4 justify-center">
-              <Button 
-                size="lg" 
-                className="bg-gradient-to-r from-blue-500 to-purple-600 hover:from-blue-600 hover:to-purple-700 text-white border-0"
-                onClick={() => scrollToSection('about')}
-              >
-                Get Started <ArrowRight className="ml-2" size={20} />
-              </Button>
-              <Button 
-                size="lg" 
-                variant="outline"
-                className="border-white/30 text-white hover:bg-white/10"
-                onClick={() => scrollToSection('services')}
-              >
-                Learn More
-              </Button>
+            <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
+              {/* Testimonial 1 */}
+              <div className="bg-white p-6 rounded-lg shadow-md">
+                <div className="flex items-center mb-4">
+                  <svg className="w-5 h-5 text-yellow-500" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg">
+                    <path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z"></path>
+                  </svg>
+                  <svg className="w-5 h-5 text-yellow-500" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg">
+                    <path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z"></path>
+                  </svg>
+                  <svg className="w-5 h-5 text-yellow-500" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg">
+                    <path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z"></path>
+                  </svg>
+                  <svg className="w-5 h-5 text-yellow-500" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg">
+                    <path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z"></path>
+                  </svg>
+                  <svg className="w-5 h-5 text-yellow-500" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg">
+                    <path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z"></path>
+                  </svg>
+                </div>
+                <p className="text-gray-700 italic mb-4">
+                  "Our stay at the Luxury Villa was absolutely perfect. The views of the Mediterranean were breathtaking, and the villa itself was beautifully decorated with traditional Moroccan elements. The staff was incredibly attentive and helped us discover the best local experiences."
+                </p>
+                <div>
+                  <h4 className="font-medium">Sophie & Pierre</h4>
+                  <p className="text-gray-500 text-sm">Paris, France</p>
+                </div>
+              </div>
+              
+              {/* Testimonial 2 */}
+              <div className="bg-white p-6 rounded-lg shadow-md">
+                <div className="flex items-center mb-4">
+                  <svg className="w-5 h-5 text-yellow-500" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg">
+                    <path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z"></path>
+                  </svg>
+                  <svg className="w-5 h-5 text-yellow-500" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg">
+                    <path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z"></path>
+                  </svg>
+                  <svg className="w-5 h-5 text-yellow-500" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg">
+                    <path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z"></path>
+                  </svg>
+                  <svg className="w-5 h-5 text-yellow-500" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg">
+                    <path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z"></path>
+                  </svg>
+                  <svg className="w-5 h-5 text-yellow-500" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg">
+                    <path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z"></path>
+                  </svg>
+                </div>
+                <p className="text-gray-700 italic mb-4">
+                  "The Traditional Moroccan Riad exceeded all our expectations. The intricate tilework, central courtyard with fountain, and rooftop terrace were all stunning. We loved being just minutes from the beach while still experiencing authentic Moroccan architecture and hospitality."
+                </p>
+                <div>
+                  <h4 className="font-medium">Ahmed & Laila</h4>
+                  <p className="text-gray-500 text-sm">Casablanca, Morocco</p>
+                </div>
+              </div>
+              
+              {/* Testimonial 3 */}
+              <div className="bg-white p-6 rounded-lg shadow-md">
+                <div className="flex items-center mb-4">
+                  <svg className="w-5 h-5 text-yellow-500" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg">
+                    <path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z"></path>
+                  </svg>
+                  <svg className="w-5 h-5 text-yellow-500" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg">
+                    <path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z"></path>
+                  </svg>
+                  <svg className="w-5 h-5 text-yellow-500" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg">
+                    <path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z"></path>
+                  </svg>
+                  <svg className="w-5 h-5 text-yellow-500" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg">
+                    <path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z"></path>
+                  </svg>
+                  <svg className="w-5 h-5 text-yellow-500" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg">
+                    <path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z"></path>
+                  </svg>
+                </div>
+                <p className="text-gray-700 italic mb-4">
+                  "We spent a wonderful week with our children at the Family Beach House. The direct beach access was perfect for the kids, and the large garden gave them plenty of space to play. The house was beautifully decorated and had all the amenities we needed for a comfortable stay."
+                </p>
+                <div>
+                  <h4 className="font-medium">John & Maria</h4>
+                  <p className="text-gray-500 text-sm">London, UK</p>
+                </div>
+              </div>
             </div>
           </div>
-        </div>
-      </section>
-
-      {/* About Section */}
-      <section id="about" className="py-20 bg-white/5 backdrop-blur-sm">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="text-center mb-16">
-            <h2 className="text-4xl md:text-5xl font-bold mb-6">About Us</h2>
-            <p className="text-xl text-gray-300 max-w-3xl mx-auto">
-              We're a team of passionate creators, designers, and developers dedicated to 
-              crafting exceptional digital experiences that make a difference.
+        </section>
+        
+        {/* Call to Action Section */}
+        <section className="py-16 bg-moroccan-blue text-white">
+          <div className="container-custom text-center">
+            <h2 className="text-3xl font-serif font-medium mb-4">Ready to Experience Martil?</h2>
+            <p className="max-w-2xl mx-auto mb-8 opacity-90">
+              Book your dream vacation property today and discover why Martil is one of Morocco's most beloved coastal destinations.
             </p>
+            <Link to="/properties" className="btn-secondary">
+              Browse All Properties
+            </Link>
           </div>
-          
-          <div className="grid md:grid-cols-3 gap-8">
-            <Card className="bg-white/10 backdrop-blur-sm border-white/20">
-              <CardContent className="p-8 text-center">
-                <div className="w-16 h-16 bg-gradient-to-r from-blue-500 to-purple-600 rounded-full flex items-center justify-center mx-auto mb-4">
-                  <span className="text-2xl font-bold">🎨</span>
-                </div>
-                <h3 className="text-xl font-bold mb-4 text-white">Creative Design</h3>
-                <p className="text-gray-300">
-                  We believe in the power of beautiful, intuitive design that tells your story.
-                </p>
-              </CardContent>
-            </Card>
-
-            <Card className="bg-white/10 backdrop-blur-sm border-white/20">
-              <CardContent className="p-8 text-center">
-                <div className="w-16 h-16 bg-gradient-to-r from-purple-500 to-pink-600 rounded-full flex items-center justify-center mx-auto mb-4">
-                  <span className="text-2xl font-bold">⚡</span>
-                </div>
-                <h3 className="text-xl font-bold mb-4 text-white">Lightning Fast</h3>
-                <p className="text-gray-300">
-                  Performance is key. We build websites that load quickly and run smoothly.
-                </p>
-              </CardContent>
-            </Card>
-
-            <Card className="bg-white/10 backdrop-blur-sm border-white/20">
-              <CardContent className="p-8 text-center">
-                <div className="w-16 h-16 bg-gradient-to-r from-pink-500 to-red-600 rounded-full flex items-center justify-center mx-auto mb-4">
-                  <span className="text-2xl font-bold">📱</span>
-                </div>
-                <h3 className="text-xl font-bold mb-4 text-white">Mobile First</h3>
-                <p className="text-gray-300">
-                  Every design is crafted to look perfect on any device, anywhere.
-                </p>
-              </CardContent>
-            </Card>
-          </div>
-        </div>
-      </section>
-
-      {/* Services Section */}
-      <section id="services" className="py-20">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="text-center mb-16">
-            <h2 className="text-4xl md:text-5xl font-bold mb-6">Our Services</h2>
-            <p className="text-xl text-gray-300 max-w-3xl mx-auto">
-              From concept to launch, we offer comprehensive solutions to bring your vision to life.
-            </p>
-          </div>
-
-          <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-8">
-            {[
-              { title: "Web Development", desc: "Custom websites built with modern technologies" },
-              { title: "UI/UX Design", desc: "Beautiful interfaces that users love to interact with" },
-              { title: "E-commerce", desc: "Powerful online stores that drive sales" },
-              { title: "Consulting", desc: "Strategic guidance for your digital transformation" }
-            ].map((service, index) => (
-              <Card key={index} className="bg-white/10 backdrop-blur-sm border-white/20 hover:bg-white/20 transition-colors group cursor-pointer">
-                <CardContent className="p-6">
-                  <h3 className="text-lg font-bold mb-3 text-white group-hover:text-blue-300 transition-colors">
-                    {service.title}
-                  </h3>
-                  <p className="text-gray-300 text-sm">
-                    {service.desc}
-                  </p>
-                </CardContent>
-              </Card>
-            ))}
-          </div>
-        </div>
-      </section>
-
-      {/* Contact Section */}
-      <section id="contact" className="py-20 bg-white/5 backdrop-blur-sm">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="text-center mb-16">
-            <h2 className="text-4xl md:text-5xl font-bold mb-6">Get In Touch</h2>
-            <p className="text-xl text-gray-300 max-w-3xl mx-auto">
-              Ready to start your next project? We'd love to hear from you.
-            </p>
-          </div>
-
-          <div className="grid md:grid-cols-3 gap-8 max-w-4xl mx-auto">
-            <Card className="bg-white/10 backdrop-blur-sm border-white/20">
-              <CardContent className="p-8 text-center">
-                <Mail className="w-8 h-8 mx-auto mb-4 text-blue-400" />
-                <h3 className="text-lg font-bold mb-2 text-white">Email</h3>
-                <p className="text-gray-300">hello@webcraft.com</p>
-              </CardContent>
-            </Card>
-
-            <Card className="bg-white/10 backdrop-blur-sm border-white/20">
-              <CardContent className="p-8 text-center">
-                <Phone className="w-8 h-8 mx-auto mb-4 text-purple-400" />
-                <h3 className="text-lg font-bold mb-2 text-white">Phone</h3>
-                <p className="text-gray-300">+1 (555) 123-4567</p>
-              </CardContent>
-            </Card>
-
-            <Card className="bg-white/10 backdrop-blur-sm border-white/20">
-              <CardContent className="p-8 text-center">
-                <MapPin className="w-8 h-8 mx-auto mb-4 text-pink-400" />
-                <h3 className="text-lg font-bold mb-2 text-white">Location</h3>
-                <p className="text-gray-300">San Francisco, CA</p>
-              </CardContent>
-            </Card>
-          </div>
-
-          <div className="text-center mt-12">
-            <Button 
-              size="lg" 
-              className="bg-gradient-to-r from-blue-500 to-purple-600 hover:from-blue-600 hover:to-purple-700 text-white border-0"
-            >
-              Start Your Project
-            </Button>
-          </div>
-        </div>
-      </section>
-
-      {/* Footer */}
-      <footer className="py-8 border-t border-white/20">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
-          <p className="text-gray-400">
-            © 2024 WebCraft. All rights reserved. Built with love and modern technology.
-          </p>
-        </div>
-      </footer>
+        </section>
+      </main>
+      
+      <Footer />
     </div>
   );
 };
