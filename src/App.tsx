@@ -60,7 +60,7 @@ const App = () => (
               
               {/* Protected owner dashboard route */}
               <Route path="/owner-dashboard" element={
-                <AuthCheck requiredRole="owner">
+                <AuthCheck>
                   <OwnerDashboard />
                 </AuthCheck>
               } />
